@@ -985,6 +985,9 @@ syn keyword scopesType Capture
 syn keyword scopesType CaptureTemplate
 syn keyword scopesType SpiceCapture
 syn keyword scopesFunction read-eval-print-loop
+syn keyword scopesSugarMacro enum
+syn keyword scopesSugarMacro dispatch
+syn keyword scopesType Enum
 syn keyword scopesSugarMacro fnchain
 syn keyword scopesSugarMacro decorate-fnchain
 syn keyword scopesType FunctionChain

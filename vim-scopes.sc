@@ -136,6 +136,7 @@ let global-symbols =
             get-symbol-styles (import Box) 
             get-symbol-styles (import Capture) 
             get-symbol-styles (import console) 
+            get-symbol-styles (import enum) 
             get-symbol-styles (import FunctionChain) 
             get-symbol-styles (import glm) 
             get-symbol-styles (import glsl) 
