@@ -26,6 +26,7 @@ let operators =
         "<<"
         "|"
         ".."
+        ":"
 
 let primitive-builtins =
     list
@@ -40,6 +41,14 @@ let primitive-builtins =
         "unquote-splice"
         "syntax-log"
         "in"
+        "square-list"
+        "options"
+        "static"
+        "plain"
+        "new"
+        "continue"
+        "except"
+        "define-infix"
 
 let special-constants =
     list

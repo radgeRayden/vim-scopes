@@ -395,7 +395,6 @@ syn keyword scopesGlobalSymbol compiler-timestamp
 syn keyword scopesGlobalSymbol debug-build?
 syn keyword scopesGlobalSymbol operating-system
 syn keyword scopesGlobalSymbol unroll-limit
-syn keyword scopesGlobalSymbol square-list
 syn keyword scopesType intptr
 syn keyword scopesFunction ptrcmp!=
 syn keyword scopesFunction ptrcmp==
@@ -1224,6 +1223,14 @@ syn keyword scopesKeyword quote
 syn keyword scopesKeyword unquote-splice
 syn keyword scopesKeyword syntax-log
 syn keyword scopesKeyword in
+syn keyword scopesKeyword square-list
+syn keyword scopesKeyword options
+syn keyword scopesKeyword static
+syn keyword scopesKeyword plain
+syn keyword scopesKeyword new
+syn keyword scopesKeyword continue
+syn keyword scopesKeyword except
+syn keyword scopesKeyword define-infix
 syn keyword scopesOperator ->
 syn keyword scopesOperator **
 syn keyword scopesOperator //
@@ -1231,6 +1238,7 @@ syn keyword scopesOperator >>
 syn keyword scopesOperator <<
 syn keyword scopesOperator |
 syn keyword scopesOperator ..
+syn keyword scopesOperator :
 set lisp
 "respectively: letters, numerals, accented letters, symbols except illegal
 syn iskeyword @,48-57,192-255,33,36-38,42-43,45-47,:,60-64,94-96,|,~
