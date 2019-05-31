@@ -10,6 +10,9 @@ If there's some mismatch between what is highlighted and legal code, feel free t
 
 Screenshots
 -----------
+indentation error highlighting
+![](https://cdn.discordapp.com/attachments/251533063253786625/583904690815631376/unknown.png)
+
 dark theme
 ![](https://media.discordapp.net/attachments/329404808643608586/583896996973248512/unknown.png?width=1248&height=676)
 
