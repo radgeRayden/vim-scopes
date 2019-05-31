@@ -201,6 +201,10 @@ let manually-defined-rules =
 
         syn region scopesBlockString start=/\v^\z(( {4})*)"{4}/ skip=/\v^%(\z1 {4}\S|^$)/ end=/\v^(\z1 {4})@!.*/me=s-1
         highlight link scopesBlockString String
+        
+        "multiple of 4 spaces followed by 1, 2 or 3 spaces and a non space is an error
+        syn match scopesIndentError /\v^( {4})*( |  |   )[^ \n]/he=e-1
+        hi link scopesIndentError Error
     # %endf: vim%
 
 let header =
