@@ -226,7 +226,7 @@ printf
             global-symbols
             "\n"
             fold (rules = "") for builtin in primitive-builtins
-                .. rules (emit-syn-definition "Builtin" (builtin as string)) "\n"
+                .. rules (emit-syn-definition "Keyword" (builtin as string)) "\n"
             fold (rules = "") for operator in operators
                 .. rules (emit-syn-definition "Operator" (operator as string)) "\n"
             manually-defined-rules
