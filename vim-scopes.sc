@@ -1,4 +1,3 @@
-
 fn starts-with? (str pattern)
     let pattern-length = (countof pattern)
     if (pattern-length <= (countof str))
@@ -17,29 +16,16 @@ fn contains? (lst value)
                 break false
             decons rest
 
-let operators-allow-assign =
-    list
-        "+"
-        "-"
-        "*"
-        "/"
-        "//"
-        "%"
-        ">>"
-        "<<"
-        "&"
-        "|"
-        "^"
-        ".."
 
-let operators-no-assign =
+let operators =
     list
         "->"
-        "<-"
-        "="
-        "=="
-        "!="
         "**"
+        "//"
+        ">>"
+        "<<"
+        "|"
+        ".."
 
 let primitive-builtins =
     list
@@ -69,52 +55,104 @@ let special-constants =
         "e:f32"
         "e:f64"
 
-fn emit-syn-definition (sym sym-type)
-    .. "syn keyword scopes" sym-type " " sym
+fn emit-syn-definition (style-name name)
+    .. "syn keyword scopes" style-name " " name
 
 let blacklist =
     .. 
-        operators-allow-assign
-        operators-no-assign 
+        operators
         primitive-builtins
         special-constants
 
 let global-symbols =
-    loop (str scope = "" (globals))
-        if (scope == null)
-            break str;
+    do
+        # import all modules so we have their symbols handy
+        using import map
+        local styles : (Map string string)
+        # from symbol_enum.inc
+        'set styles "style-none"               "None"
+        'set styles "style-symbol"             "Symbol" 
+        'set styles "style-string"             "String"
+        'set styles "style-number"             "Number"
+        'set styles "style-keyword"            "Keyword"
+        'set styles "style-function"           "Function"
+        'set styles "style-sfxfunction"        "Function"
+        'set styles "style-operator"           "Operator"
+        'set styles "style-instruction"        "Instruction"
+        'set styles "style-type"               "Type"
+        'set styles "style-comment"            "Comment"
+        'set styles "style-error"              "Error"
+        'set styles "style-warning"            "Warning"
+        'set styles "style-location"           "Location"
+        inline get-symbol-styles(scope)
+            loop (str scope = "" scope)
+                if (scope == null)
+                    break str;
 
-        let scope-syms =
-            fold (str = "") for k v in scope
-                let _type = ('typeof (getattr scope k))
-                #blacklist keywords that we're gonna define manually
-                if (contains? blacklist (k as string))
-                    continue str
-                if (starts-with? (k as string) "#idx") """"
-                    continue str
-                let sym =
-                    if (_type == Builtin)
-                        emit-syn-definition (k as string) "Builtin"
-                    elseif ((_type == Closure) or (starts-with? (k as string) "sc_"))
-                        emit-syn-definition (k as string) "Function"
-                    elseif (_type == type)
-                        emit-syn-definition (k as string) "Type"
-                    elseif (_type == SugarMacro)
-                        emit-syn-definition (k as string) "SugarMacro"
-                    elseif (_type == SpiceMacro)
-                        emit-syn-definition (k as string) "SpiceMacro"
-                    elseif (_type == Generator)
-                        emit-syn-definition (k as string) "Function"
-                    else
-                        emit-syn-definition (k as string) "GlobalSymbol"
-                .. str "\n" sym
-        _ (str .. scope-syms) (sc_scope_get_parent scope)
+                let scope-syms =
+                    fold (str = "") for k v in scope
+                        let name = (k as string)
+                        let _type = ('typeof (getattr scope k))
+                        let style =
+                            try
+                                ('get styles ((sc_symbol_style k) as string))
+                            except (ex)
+                                report ex
+                                ""
+                        # blacklist keywords that we're gonna define manually
+                        if (contains? blacklist name)
+                            continue str
+                        if (starts-with? name "#") 
+                            continue str
+                        let sym =
+                            if (style != "Symbol")
+                                (emit-syn-definition style name)
+                            # fallback for symbols not defined in cpp-land
+                            elseif (_type == Unknown)
+                                # some Closures get type "Unknown" for some reason
+                                (as? (getattr scope k) Closure) and (emit-syn-definition "Function" name) or ""
+                            # external scopes functions
+                            elseif (starts-with? name "sc_")
+                                (emit-syn-definition "Function" name)
+                            elseif (_type == Closure)
+                                (emit-syn-definition "Function" name)
+                            elseif (_type == type)
+                                (emit-syn-definition "Type" name)
+                            elseif (_type == SugarMacro)
+                                (emit-syn-definition "SugarMacro" name)
+                            elseif (_type == SpiceMacro)
+                                (emit-syn-definition "SpiceMacro" name)
+                            elseif (_type == Generator)
+                                (emit-syn-definition "Function" name)
+                            else
+                                (emit-syn-definition "GlobalSymbol" name)
+                        .. str "\n" sym
+                _ (str .. scope-syms) (sc_scope_get_parent scope)
+
+        # we need to import all modules to get their respective symbols
+        ..
+            get-symbol-styles (globals) 
+            get-symbol-styles (import Array) 
+            get-symbol-styles (import Box) 
+            get-symbol-styles (import Capture) 
+            get-symbol-styles (import console) 
+            get-symbol-styles (import FunctionChain) 
+            get-symbol-styles (import glm) 
+            get-symbol-styles (import glsl) 
+            get-symbol-styles (import itertools) 
+            get-symbol-styles (import Map) 
+            get-symbol-styles (import spicetools) 
+            get-symbol-styles (import struct) 
+            get-symbol-styles (import testing) 
+            get-symbol-styles (import UTF-8) 
+
+# -----------------------------------------------------------------------------
 
 let manually-defined-rules =
     # %foreign: vim%
     """"set lisp
         "respectively: letters, numerals, accented letters, symbols except illegal
-        syn iskeyword @,48-57,192-255,33,36-38,42-47,:,60-64,94-96,|,~
+        syn iskeyword @,48-57,192-255,33,36-38,42-43,45-47,:,60-64,94-96,|,~
 
         " literals/constants
         syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
@@ -132,10 +170,10 @@ let manually-defined-rules =
         syn match scopesEscape contained /\v\\x\x\x/
 
         " highlighting links
-        hi link scopesBuiltin Keyword
+        hi link scopesKeyword Keyword
         hi link scopesFunction Function
         hi link scopesType Type
-        hi link scopesSugarMacro Statement
+        hi link scopesSugarMacro Keyword
         hi link scopesGlobalSymbol Special
         hi link scopesSpiceMacro Keyword
         hi link scopesBoolean Boolean
@@ -179,15 +217,12 @@ printf
     as
         ..
             header
+            "\n"
             global-symbols
+            "\n"
             fold (rules = "") for builtin in primitive-builtins
-                .. rules (emit-syn-definition (builtin as string) "Builtin") "\n"
-            fold (rules = "") for operator in operators-allow-assign
-                .. 
-                    rules 
-                    .. (emit-syn-definition (operator as string) "Operator") "\n"
-                    .. (emit-syn-definition (.. (operator as string) "=") "Operator") "\n"
-            fold (rules = "") for operator in operators-no-assign
-                .. rules (emit-syn-definition (operator as string) "Operator") "\n"
+                .. rules (emit-syn-definition "Builtin" (builtin as string)) "\n"
+            fold (rules = "") for operator in operators
+                .. rules (emit-syn-definition "Operator" (operator as string)) "\n"
             manually-defined-rules
         rawstring
