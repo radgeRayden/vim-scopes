@@ -1081,10 +1081,11 @@ hi link scopesOperator Operator
 hi link scopesSymbol PreProc
 hi link scopesEscape Special
 
-" hoping this works forever cause I'm never gonna change it
-syn region scopesComment start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1
 "at least one non whitespace character before the comment
 syn region scopesComment start=/\v((\s*)?\S+(\s*)?)@=#/hs=e end=/\v\n/
+" hoping this works forever cause I'm never gonna change it
+syn region scopesComment start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1
+
 hi link scopesComment Comment
 
 syn region scopesString start=/\v"/ skip=/\v\\./ end=/\v"/ contains=scopesEscape
