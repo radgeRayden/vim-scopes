@@ -7,3 +7,11 @@ To rebuild the plugin:
 in the repo directory run `scopes ./vim-scopes.sc > syntax/scopes.vim`.
 
 If there's some mismatch between what is highlighted and legal code, feel free to file an issue. However, be aware that mid-line string blocks will *not* be added, as they're more trouble to match than they're worth.
+
+Screenshots
+-----------
+dark theme
+![](https://media.discordapp.net/attachments/329404808643608586/583896996973248512/unknown.png?width=1248&height=676)
+
+light theme
+![](https://cdn.discordapp.com/attachments/329404808643608586/583897072051290112/unknown.png)
