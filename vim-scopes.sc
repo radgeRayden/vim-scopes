@@ -24,9 +24,13 @@ let operators =
         "//"
         ">>"
         "<<"
-        "|"
         ".."
         ":"
+        "//="
+        "//="
+        ">>="
+        "<<="
+        "..="
 
 let primitive-builtins =
     list
@@ -176,8 +180,11 @@ let manually-defined-rules =
         syn keyword scopesConstant pi pi:f32 p:f64 e e:f32 e:f64
         syn keyword scopesConstant +inf -inf nan
         syn match scopesSymbol /\v(^|\s|\(|\[|\{)@<=(\'\k+\K)(\s|$|%$|\)|\]|\})@=/
-        syn match scopesEscape contained /\v\\\k/
+        syn match scopesEscape contained /\v\\\S/
         syn match scopesEscape contained /\v\\x\x\x/
+
+        " operators containing | gotta be matched
+        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\|\=?)(\s|$|%$|\)|\]|\})@=/ 
 
         " highlighting links
         hi link scopesKeyword Keyword

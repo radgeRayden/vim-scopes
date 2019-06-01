@@ -157,14 +157,10 @@ syn keyword scopesOperator -=
 syn keyword scopesOperator +=
 syn keyword scopesOperator *=
 syn keyword scopesOperator /=
-syn keyword scopesFunction //=
 syn keyword scopesOperator %=
-syn keyword scopesFunction >>=
-syn keyword scopesFunction <<=
 syn keyword scopesOperator &=
 syn keyword scopesOperator |=
 syn keyword scopesOperator ^=
-syn keyword scopesFunction ..=
 syn keyword scopesFunction char
 syn keyword scopesType incomplete
 syn keyword scopesOperator :=
@@ -245,6 +241,7 @@ syn keyword scopesSugarMacro define-infix<
 syn keyword scopesOperator +
 syn keyword scopesOperator *
 syn keyword scopesOperator @
+syn keyword scopesOperator |
 syn keyword scopesOperator &
 syn keyword scopesSugarMacro sugar-set-scope!
 syn keyword scopesSpiceMacro sabs
@@ -334,6 +331,7 @@ syn keyword scopesOperator *
 syn keyword scopesOperator /
 syn keyword scopesOperator %
 syn keyword scopesOperator &
+syn keyword scopesOperator |
 syn keyword scopesOperator ^
 syn keyword scopesOperator =
 syn keyword scopesOperator @
@@ -1236,9 +1234,13 @@ syn keyword scopesOperator **
 syn keyword scopesOperator //
 syn keyword scopesOperator >>
 syn keyword scopesOperator <<
-syn keyword scopesOperator |
 syn keyword scopesOperator ..
 syn keyword scopesOperator :
+syn keyword scopesOperator //=
+syn keyword scopesOperator //=
+syn keyword scopesOperator >>=
+syn keyword scopesOperator <<=
+syn keyword scopesOperator ..=
 set lisp
 "respectively: letters, numerals, accented letters, symbols except illegal
 syn iskeyword @,48-57,192-255,33,36-38,42-43,45-47,:,60-64,94-96,|,~
@@ -1255,8 +1257,11 @@ syn keyword scopesNothing none unnamed null
 syn keyword scopesConstant pi pi:f32 p:f64 e e:f32 e:f64
 syn keyword scopesConstant +inf -inf nan
 syn match scopesSymbol /\v(^|\s|\(|\[|\{)@<=(\'\k+\K)(\s|$|%$|\)|\]|\})@=/
-syn match scopesEscape contained /\v\\\k/
+syn match scopesEscape contained /\v\\\S/
 syn match scopesEscape contained /\v\\x\x\x/
+
+" operators containing | gotta be matched
+syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\|\=?)(\s|$|%$|\)|\]|\})@=/ 
 
 " highlighting links
 hi link scopesKeyword Keyword
