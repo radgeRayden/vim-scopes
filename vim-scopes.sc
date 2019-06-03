@@ -179,6 +179,7 @@ let manually-defined-rules =
         syn keyword scopesNothing none unnamed null
         syn keyword scopesConstant pi pi:f32 p:f64 e e:f32 e:f64
         syn keyword scopesConstant +inf -inf nan
+        syn keyword scopesGlobalSymbol main-module?
         syn match scopesSymbol /\v(^|\s|\(|\[|\{)@<=(\'\k+)(\s|$|%$|\)|\]|\})@=/
         syn match scopesEscape contained /\v\\\S/
         syn match scopesEscape contained /\v\\x\x\x/
