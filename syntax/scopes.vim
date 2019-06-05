@@ -1248,6 +1248,7 @@ syn iskeyword @,48-57,192-255,33,36-38,42-43,45-47,:,60-64,94-96,|,~
 " literals/constants
 syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
 syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|f64)?)(\s|$|%$|\)|\]|\})@=/ 
+syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|f64)?(\s|$|%$|\)|\]|\})@=/ 
 syn match scopesHex /\v(^|\s|\(|\[|\{)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
 syn match scopesOctal /\v()@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
 syn match scopesBinary /\v(^|\s|\(|\[|\{)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
@@ -1285,11 +1286,11 @@ hi link scopesSymbol PreProc
 hi link scopesEscape Special
 
 "at least one non whitespace character before the comment
-syn region scopesComment start=/\v((\s*)?\S+(\s*)?)@=#/hs=e end=/\v\n/
+syn region scopesComment contains=scopesTodo,scopesFixme start=/\v((\s*)?\S+(\s*)?)@=#/hs=e end=/\v\n/ 
 " hoping this works forever cause I'm never gonna change it
-syn region scopesComment start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1
+syn region scopesComment contains=scopesTodo,scopesFixme start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1 
 
-hi link scopesComment Comment
+hi link scopesComment Comment 
 
 syn region scopesString start=/\v"/ skip=/\v\\./ end=/\v"/ contains=scopesEscape
 hi link scopesString String
@@ -1300,3 +1301,8 @@ highlight link scopesBlockString String
 "multiple of 4 spaces followed by 1, 2 or 3 spaces and a non space is an error
 syn match scopesIndentError /\v^( {4})*( |  |   )[^ \n]/me=e-1
 hi link scopesIndentError ErrorMsg
+
+syn match scopesTodo /\vTODO:/he=e-1 contained
+hi link scopesTodo WarningMsg
+syn match scopesFixme /\vFIXME:/he=e-1 contained
+hi link scopesFixme ErrorMsg
