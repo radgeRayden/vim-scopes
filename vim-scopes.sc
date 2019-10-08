@@ -24,13 +24,11 @@ let operators =
         "//"
         ">>"
         "<<"
-        ".."
         ":"
         "//="
         "//="
         ">>="
         "<<="
-        "..="
 
 let primitive-builtins =
     list
@@ -80,7 +78,7 @@ let blacklist =
 let global-symbols =
     do
         # import all modules so we have their symbols handy
-        using import map
+        using import Map
         local styles : (Map string string)
         # from symbol_enum.inc
         'set styles "style-none"               "None"
@@ -104,6 +102,7 @@ let global-symbols =
 
                 let scope-syms =
                     fold (str = "") for k v in scope
+                        k as:= Symbol
                         let name = (k as string)
                         let _type = ('typeof (getattr scope k))
                         let style =
@@ -166,7 +165,7 @@ let manually-defined-rules =
     # %foreign: vim%
     """"set lisp
         "respectively: letters, numerals, accented letters, symbols except illegal
-        syn iskeyword @,48-57,192-255,33,36-38,42-43,45-47,:,60-64,94-96,|,~
+        syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
 
         " literals/constants
         syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
@@ -186,8 +185,10 @@ let manually-defined-rules =
         syn match scopesEscape contained /\v\\\S/
         syn match scopesEscape contained /\v\\x\x\x/
 
-        " operators containing | gotta be matched
+        " operators containing | and . gotta be matched
         syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\|\=?)(\s|$|%$|\)|\]|\})@=/ 
+        syn match scopesOperator "\.\."
+        syn match scopesOperator "\.\.="
 
         " highlighting links
         hi link scopesKeyword Keyword
