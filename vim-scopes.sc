@@ -187,9 +187,9 @@ let manually-defined-rules =
 
         " operators containing | and . gotta be matched
         syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\|\=?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesOperator "\."
-        syn match scopesOperator "\.\."
-        syn match scopesOperator "\.\.="
+        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\=?)(\s|$|%$|\)|\]|\})@=/ 
+        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\.\=?)(\s|$|%$|\)|\]|\})@=/ 
+        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\.\=\=?)(\s|$|%$|\)|\]|\})@=/ 
 
         " highlighting links
         hi link scopesKeyword Keyword
