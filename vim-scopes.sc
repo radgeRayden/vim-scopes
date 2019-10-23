@@ -47,6 +47,7 @@ let primitive-builtins =
         "options"
         "static"
         "plain"
+        "packed"
         "new"
         "continue"
         "except"
@@ -169,8 +170,8 @@ let manually-defined-rules =
 
         " literals/constants
         syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
-        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|f64)?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|f64)?(\s|$|%$|\)|\]|\})@=/ 
+        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)(\s|$|%$|\)|\]|\})@=/ 
+        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?(\s|$|%$|\)|\]|\})@=/ 
         syn match scopesHex /\v(^|\s|\(|\[|\{)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
         syn match scopesOctal /\v()@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
         syn match scopesBinary /\v(^|\s|\(|\[|\{)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/

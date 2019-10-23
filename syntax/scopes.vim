@@ -86,7 +86,6 @@ syn keyword scopesFunction range
 syn keyword scopesFunction convert-assert-args
 syn keyword scopesFunction make-unpack-function
 syn keyword scopesFunction gen-tupleof
-syn keyword scopesFunction extract-integer
 syn keyword scopesFunction any?
 syn keyword scopesFunction all?
 syn keyword scopesFunction signed-vector-binary-op
@@ -211,6 +210,7 @@ syn keyword scopesFunction extract-single-arg
 syn keyword scopesFunction extract-single-type-arg
 syn keyword scopesFunction make-const-value-property-function
 syn keyword scopesFunction make-const-type-property-function
+syn keyword scopesFunction extract-integer
 syn keyword scopesFunction expand-define
 syn keyword scopesFunction select-op-macro
 syn keyword scopesSpiceMacro imply?
@@ -232,6 +232,7 @@ syn keyword scopesSpiceMacro unqualified
 syn keyword scopesSpiceMacro qualifiersof
 syn keyword scopesSpiceMacro keyof
 syn keyword scopesSpiceMacro returnof
+syn keyword scopesFunction offsetof
 syn keyword scopesSpiceMacro Closure->Generator
 syn keyword scopesSpiceMacro Closure->Collector
 syn keyword scopesSugarMacro qq
@@ -581,6 +582,7 @@ syn keyword scopesFunction sc_type_field_index
 syn keyword scopesFunction sc_type_field_name
 syn keyword scopesFunction sc_type_sizeof
 syn keyword scopesFunction sc_type_alignof
+syn keyword scopesFunction sc_type_offsetof
 syn keyword scopesFunction sc_type_countof
 syn keyword scopesFunction sc_type_kind
 syn keyword scopesFunction sc_type_debug_abi
@@ -1374,6 +1376,7 @@ syn keyword scopesKeyword square-list
 syn keyword scopesKeyword options
 syn keyword scopesKeyword static
 syn keyword scopesKeyword plain
+syn keyword scopesKeyword packed
 syn keyword scopesKeyword new
 syn keyword scopesKeyword continue
 syn keyword scopesKeyword except
@@ -1394,8 +1397,8 @@ syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
 
 " literals/constants
 syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
-syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|f64)?)(\s|$|%$|\)|\]|\})@=/ 
-syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|f64)?(\s|$|%$|\)|\]|\})@=/ 
+syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)(\s|$|%$|\)|\]|\})@=/ 
+syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?(\s|$|%$|\)|\]|\})@=/ 
 syn match scopesHex /\v(^|\s|\(|\[|\{)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
 syn match scopesOctal /\v()@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
 syn match scopesBinary /\v(^|\s|\(|\[|\{)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
