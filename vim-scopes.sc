@@ -105,10 +105,10 @@ let global-symbols =
                     fold (str = "") for k v in scope
                         k as:= Symbol
                         let name = (k as string)
-                        let _type = ('typeof (getattr scope k))
+                        let _type = ('typeof ('@ scope k))
                         let style =
                             try
-                                ('get styles ((sc_symbol_style k) as string))
+                                deref ('get styles ((sc_symbol_style k) as string))
                             except (ex)
                                 report ex
                                 ""
@@ -123,7 +123,7 @@ let global-symbols =
                             # fallback for symbols not defined in cpp-land
                             elseif (_type == Unknown)
                                 # some Closures get type "Unknown" for some reason
-                                (as? (getattr scope k) Closure) and (emit-syn-definition "Function" name) or ""
+                                (as? ('@ scope k) Closure) and (emit-syn-definition "Function" name) or ""
                             # external scopes functions
                             elseif (starts-with? name "sc_")
                                 (emit-syn-definition "Function" name)
@@ -243,8 +243,13 @@ let header =
         let b:current_syntax = "scopes"
     # %endf: vim%
 
-include "stdio.h"
-printf
+vvv bind stdio
+do
+    let header = (include "stdio.h")
+    using header.extern
+    locals;
+
+stdio.printf
     "%s"
     as
         ..
