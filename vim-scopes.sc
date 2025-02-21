@@ -1,3 +1,5 @@
+using import include slice 
+
 fn starts-with? (str pattern)
     let pattern-length = (countof pattern)
     if (pattern-length <= (countof str))
@@ -97,12 +99,12 @@ let global-symbols =
         'set styles "style-warning"            "Warning"
         'set styles "style-location"           "Location"
         inline get-symbol-styles(scope)
-            loop (str scope = "" scope)
+            loop (str scope = str"" scope)
                 if (scope == null)
                     break str;
 
                 let scope-syms =
-                    fold (str = "") for k v in scope
+                    fold (str = str"") for k v in scope
                         k as:= Symbol
                         let name = (k as string)
                         let _type = ('typeof ('@ scope k))
@@ -111,7 +113,7 @@ let global-symbols =
                                 deref ('get styles ((sc_symbol_style k) as string))
                             except (ex)
                                 report ex
-                                ""
+                                "" as string
                         # blacklist keywords that we're gonna define manually
                         if (contains? blacklist name)
                             continue str
@@ -257,9 +259,9 @@ stdio.printf
             "\n"
             global-symbols
             "\n"
-            fold (rules = "") for builtin in primitive-builtins
+            fold (rules = str"") for builtin in primitive-builtins
                 .. rules (emit-syn-definition "Keyword" (builtin as string)) "\n"
-            fold (rules = "") for operator in operators
+            fold (rules = str"") for operator in operators
                 .. rules (emit-syn-definition "Operator" (operator as string)) "\n"
             manually-defined-rules
         rawstring
