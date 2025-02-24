@@ -1880,7 +1880,6 @@ syn keyword scopesOperator //=
 syn keyword scopesOperator //=
 syn keyword scopesOperator >>=
 syn keyword scopesOperator <<=
-set lisp
 "respectively: letters, numerals, accented letters, symbols except illegal
 syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
 
