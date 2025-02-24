@@ -31,6 +31,7 @@ let operators =
         "//="
         ">>="
         "<<="
+        "\\|="
 
 let primitive-builtins =
     list
@@ -228,11 +229,6 @@ let manually-defined-rules =
         "multiple of 4 spaces followed by 1, 2 or 3 spaces and a non space is an error
         syn match scopesIndentError /\v^( {4})*( |  |   )[^ \n]/me=e-1
         hi link scopesIndentError ErrorMsg
-
-        syn match scopesTodo /\vTODO:/he=e-1 contained
-        hi link scopesTodo WarningMsg
-        syn match scopesFixme /\vFIXME:/he=e-1 contained
-        hi link scopesFixme ErrorMsg
     # %endf: vim%
 
 let header =

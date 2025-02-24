@@ -1880,6 +1880,7 @@ syn keyword scopesOperator //=
 syn keyword scopesOperator //=
 syn keyword scopesOperator >>=
 syn keyword scopesOperator <<=
+syn keyword scopesOperator \|=
 "respectively: letters, numerals, accented letters, symbols except illegal
 syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
 
@@ -1942,8 +1943,3 @@ highlight link scopesBlockString String
 "multiple of 4 spaces followed by 1, 2 or 3 spaces and a non space is an error
 syn match scopesIndentError /\v^( {4})*( |  |   )[^ \n]/me=e-1
 hi link scopesIndentError ErrorMsg
-
-syn match scopesTodo /\vTODO:/he=e-1 contained
-hi link scopesTodo WarningMsg
-syn match scopesFixme /\vFIXME:/he=e-1 contained
-hi link scopesFixme ErrorMsg
