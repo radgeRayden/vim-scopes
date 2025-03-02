@@ -288,7 +288,6 @@ syn keyword scopesOperator *=
 syn keyword scopesOperator /=
 syn keyword scopesOperator %=
 syn keyword scopesOperator &=
-syn keyword scopesOperator |=
 syn keyword scopesOperator ^=
 syn keyword scopesSugarMacro ..=
 syn keyword scopesSugarMacro as:=
@@ -411,7 +410,7 @@ syn keyword scopesSugarMacro define-infix**
 syn keyword scopesOperator ..
 syn keyword scopesOperator +
 syn keyword scopesOperator *
-syn keyword scopesOperator |
+syn keyword scopesOperator \|
 syn keyword scopesOperator &
 syn keyword scopesOperator ^
 syn keyword scopesSpiceMacro va-option-branch
@@ -524,7 +523,7 @@ syn keyword scopesOperator *
 syn keyword scopesOperator /
 syn keyword scopesOperator %
 syn keyword scopesOperator &
-syn keyword scopesOperator |
+syn keyword scopesOperator \|
 syn keyword scopesOperator ^
 syn keyword scopesOperator ..
 syn keyword scopesOperator @

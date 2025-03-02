@@ -31,7 +31,7 @@ let operators =
         "//="
         ">>="
         "<<="
-        "\\|="
+        "|="
 
 let primitive-builtins =
     list
@@ -71,6 +71,10 @@ let special-constants =
         "e:f64"
 
 fn emit-syn-definition (style-name name)
+    let name =
+        if ((name @ 0) == (char "|"))
+            "\\" .. name
+        else name
     .. "syn keyword scopes" style-name " " name
 
 let blacklist =
