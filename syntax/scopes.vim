@@ -1880,8 +1880,8 @@ syn keyword scopesOperator //=
 syn keyword scopesOperator >>=
 syn keyword scopesOperator <<=
 syn keyword scopesOperator \|=
-"respectively: letters, numerals, accented letters, symbols except illegal
-syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
+"letters, numerals, accented letters, symbols except illegal
+set iskeyword @,48-57,192-255,33,36-38,42-43,-,47,:,60-64,94-96,|,~
 
 " literals/constants
 syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
