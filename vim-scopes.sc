@@ -173,7 +173,7 @@ let manually-defined-rules =
     # %foreign: vim%
     """""letters, numerals, accented letters, symbols except illegal
         syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,|,~
-        setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,.,-,<,>,:,/,~,!,+
+        setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,-,<,>,:,/,~,!,+
 
         " literals/constants
         syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
