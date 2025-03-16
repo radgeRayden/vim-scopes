@@ -176,12 +176,12 @@ let manually-defined-rules =
         setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,-,<,>,:,/,~,!,?,/,+
 
         " literals/constants
-        syn match scopesInteger /\v(^|\s|\(|\[|\{)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\})@=/
-        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesFloat /\v(^|\s|\(|\[|\{)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesHex /\v(^|\s|\(|\[|\{)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
-        syn match scopesOctal /\v()@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
-        syn match scopesBinary /\v(^|\s|\(|\[|\{)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\})@=/
+        syn match scopesInteger /\v(^|\s|\(|\[|\{|,)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\}|,)@=/
+        syn match scopesFloat /\v(^|\s|\(|\[|\{|,)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)(\s|$|%$|\)|\]|\}|,)@=/ 
+        syn match scopesFloat /\v(^|\s|\(|\[|\{|,)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?(\s|$|%$|\)|\]|\}|,)@=/ 
+        syn match scopesHex /\v(^|\s|\(|\[|\{|,)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
+        syn match scopesOctal /\v(^|\s|\(|\[|\{|,)@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
+        syn match scopesBinary /\v(^|\s|\(|\[|\{|,)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
         syn keyword scopesBoolean true
         syn keyword scopesBoolean false
         syn keyword scopesNothing none unnamed null
