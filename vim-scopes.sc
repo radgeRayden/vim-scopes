@@ -189,7 +189,7 @@ let manually-defined-rules =
         syn keyword scopesConstant +inf -inf nan
         syn keyword scopesGlobalSymbol main-module?
         syn keyword scopesGlobalSymbol module-dir
-        syn match scopesSymbol /\v(^|\s|\(|\[|\{)@<=(\'\k+)(\s|$|%$|\)|\]|\})@=/
+        syn match scopesSymbol /\v(^|\s|\(|\[|\{|,)@<=(\'\k+)(\s|$|%$|\)|\]|\}|,)@=/
         syn match scopesEscape contained /\v\\\S/
         syn match scopesEscape contained /\v\\x\x\x/
 
