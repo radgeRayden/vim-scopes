@@ -1,173 +1,14 @@
-using import include slice 
+using import print
+symbols := import .scopes-std-symbols.symbols
 
-fn starts-with? (str pattern)
-    let pattern-length = (countof pattern)
-    if (pattern-length <= (countof str))
-        (lslice str pattern-length) == pattern
-    else
-        false
-
-fn contains? (lst value)
-    if (empty? lst)
-        false
-    else
-        loop (current rest = (decons lst))
-            if (current == value)
-                break true
-            elseif (empty? rest)
-                break false
-            decons rest
-
-
-let operators =
-    list
-        "->"
-        "**"
-        "//"
-        ">>"
-        "<<"
-        ":"
-        "//="
-        "//="
-        ">>="
-        "<<="
-        "|="
-
-let primitive-builtins =
-    list
-        "else"
-        "elseif"
-        "then"
-        "case"
-        "pass"
-        "default"
-        "curly-list"
-        "quote"
-        "unquote-splice"
-        "syntax-log"
-        "in"
-        "square-list"
-        "options"
-        "static"
-        "plain"
-        "packed"
-        "new"
-        "continue"
-        "except"
-        "define-infix"
-
-let special-constants =
-    list
-        "true"
-        "false"
-        "null"
-        "none"
-        "unnamed"
-        "pi"
-        "pi:f32"
-        "pi:f64"
-        "e"
-        "e:f32"
-        "e:f64"
-
-fn emit-syn-definition (style-name name)
-    let name =
-        if ((name @ 0) == (char "|"))
-            "\\" .. name
-        else name
-    .. "syn keyword scopes" style-name " " name
-
-let blacklist =
-    .. 
-        operators
-        primitive-builtins
-        special-constants
-
-let global-symbols =
-    do
-        # import all modules so we have their symbols handy
-        using import Map
-        local styles : (Map string string)
-        # from symbol_enum.inc
-        'set styles "style-none"               "None"
-        'set styles "style-symbol"             "Symbol" 
-        'set styles "style-string"             "String"
-        'set styles "style-number"             "Number"
-        'set styles "style-keyword"            "Keyword"
-        'set styles "style-function"           "Function"
-        'set styles "style-sfxfunction"        "Function"
-        'set styles "style-operator"           "Operator"
-        'set styles "style-instruction"        "Instruction"
-        'set styles "style-type"               "Type"
-        'set styles "style-comment"            "Comment"
-        'set styles "style-error"              "Error"
-        'set styles "style-warning"            "Warning"
-        'set styles "style-location"           "Location"
-        inline get-symbol-styles(scope)
-            loop (str scope = str"" scope)
-                if (scope == null)
-                    break str;
-
-                let scope-syms =
-                    fold (str = str"") for k v in scope
-                        k as:= Symbol
-                        let name = (k as string)
-                        let _type = ('typeof ('@ scope k))
-                        let style =
-                            try
-                                deref ('get styles ((sc_symbol_style k) as string))
-                            except (ex)
-                                report ex
-                                "" as string
-                        # blacklist keywords that we're gonna define manually
-                        if (contains? blacklist name)
-                            continue str
-                        if (starts-with? name "#") 
-                            continue str
-                        let sym =
-                            if (style != "Symbol")
-                                (emit-syn-definition style name)
-                            # fallback for symbols not defined in cpp-land
-                            elseif (_type == Unknown)
-                                # some Closures get type "Unknown" for some reason
-                                (as? ('@ scope k) Closure) and (emit-syn-definition "Function" name) or ""
-                            # external scopes functions
-                            elseif (starts-with? name "sc_")
-                                (emit-syn-definition "Function" name)
-                            elseif (_type == Closure)
-                                (emit-syn-definition "Function" name)
-                            elseif (_type == type)
-                                (emit-syn-definition "Type" name)
-                            elseif (_type == SugarMacro)
-                                (emit-syn-definition "SugarMacro" name)
-                            elseif (_type == SpiceMacro)
-                                (emit-syn-definition "SpiceMacro" name)
-                            elseif (_type == Generator)
-                                (emit-syn-definition "Function" name)
-                            else
-                                (emit-syn-definition "GlobalSymbol" name)
-                        .. str "\n" sym
-                _ (str .. scope-syms) (sc_scope_get_parent scope)
-
-        # we need to import all modules to get their respective symbols
-        ..
-            get-symbol-styles (globals) 
-            get-symbol-styles (import Array) 
-            get-symbol-styles (import Box) 
-            get-symbol-styles (import Capture) 
-            get-symbol-styles (import console) 
-            get-symbol-styles (import enum) 
-            get-symbol-styles (import FunctionChain) 
-            get-symbol-styles (import glm) 
-            get-symbol-styles (import glsl) 
-            get-symbol-styles (import itertools) 
-            get-symbol-styles (import Map) 
-            get-symbol-styles (import spicetools) 
-            get-symbol-styles (import struct) 
-            get-symbol-styles (import testing) 
-            get-symbol-styles (import UTF-8) 
-
-# -----------------------------------------------------------------------------
+let header =
+    # %foreign: vim%
+    """"
+        if exists("b:current_syntax")
+            finish
+        endif
+        let b:current_syntax = "scopes"
+    # %endf: vim%
 
 let manually-defined-rules =
     # %foreign: vim%
@@ -219,9 +60,9 @@ let manually-defined-rules =
         hi link scopesEscape Special
 
         "at least one non whitespace character before the comment
-        syn region scopesComment contains=scopesTodo,scopesFixme start=/\v((\s*)?\S+(\s*)?)@=#/hs=e end=/\v\n/ 
+        syn region scopesComment start=/\v((\s*)?\S+(\s*)?)@=#/hs=e end=/\v\n/ 
         " hoping this works forever cause I'm never gonna change it
-        syn region scopesComment contains=scopesTodo,scopesFixme start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1 
+        syn region scopesComment start=/\v\z(^ *)#/ skip=/\v^%(\z1 \S|^$)/ end=/\v^(\z1 )@!.*/me=s-1 
 
         hi link scopesComment Comment 
 
@@ -236,32 +77,26 @@ let manually-defined-rules =
         hi link scopesIndentError ErrorMsg
     # %endf: vim%
 
-let header =
-    # %foreign: vim%
-    """"
-        if exists("b:current_syntax")
-            finish
-        endif
-        let b:current_syntax = "scopes"
-    # %endf: vim%
+fn emit-syn-definition (style-name name)
+    let name =
+        if ((name @ 0) == (char "|"))
+            "\\" .. name
+        else name
+    .. "syn keyword scopes" style-name " " name
 
-vvv bind stdio
-do
-    let header = (include "stdio.h")
-    using header.extern
-    locals;
+inline emit-syn-definition-list (kind style)
+    fold (result = str"") for k v in (getattr symbols kind)
+        .. result (emit-syn-definition style (v as string)) "\n"
 
-stdio.printf
-    "%s"
-    as
-        ..
-            header
-            "\n"
-            global-symbols
-            "\n"
-            fold (rules = str"") for builtin in primitive-builtins
-                .. rules (emit-syn-definition "Keyword" (builtin as string)) "\n"
-            fold (rules = str"") for operator in operators
-                .. rules (emit-syn-definition "Operator" (operator as string)) "\n"
-            manually-defined-rules
-        rawstring
+vvv print 
+.. 
+    header
+    emit-syn-definition-list 'keywords "Keyword"
+    emit-syn-definition-list 'functions "Function"
+    emit-syn-definition-list 'operators "Operator"
+    emit-syn-definition-list 'types "Type"
+    emit-syn-definition-list 'sugar-macros "SugarMacro"
+    emit-syn-definition-list 'spice-macros "SpiceMacro"
+    emit-syn-definition-list 'global-symbols "GlobalSymbol"
+    emit-syn-definition-list 'special-constants "Constant"
+    manually-defined-rules
