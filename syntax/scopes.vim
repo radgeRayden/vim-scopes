@@ -3,6 +3,17 @@ if exists("b:current_syntax")
     finish
 endif
 let b:current_syntax = "scopes"
+syn match scopesInteger /\v(^| +|[\(\[{,;])@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)( |[%\)\]},;]|$)@=/
+syn match scopesFloat /\v(^| +|[\(\[{,;])@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)( |[%\)\]},;]|$)@=/
+syn match scopesFloat /\v(^| +|[\(\[{,;])@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?( |[%\)\]},;]|$)@=/
+syn match scopesHex /\v(^| +|[\(\[{,;])@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
+syn match scopesOctal /\v(^| +|[\(\[{,;])@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
+syn match scopesBinary /\v(^| +|[\(\[{,;])@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
+syn match scopesSymbol /\v(^| +|[\(\[{,;])@<=(\'\k+)( |[%\)\]},;]|$)@=/
+syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\|\=?)( |[%\)\]},;]|$)@=/
+syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\=?)( |[%\)\]},;]|$)@=/
+syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\.\=?)( |[%\)\]},;]|$)@=/
+syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\.\=\=?)( |[%\)\]},;]|$)@=/
 syn keyword scopesKeyword else
 syn keyword scopesKeyword elseif
 syn keyword scopesKeyword then
@@ -1981,17 +1992,6 @@ syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,\|,~,!,?,/,+
 setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,-,<,>,:,/,~,!,?,/,+
 
 " literals/constants
-syn match scopesInteger /\v(^| +|[\(\[{,;])@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)( |[%\)\]},;]|$)@=/
-syn match scopesFloat /\v(^| +|[\(\[{,;])@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)( |[%\)\]},;]|$)@=/
-syn match scopesFloat /\v(^| +|[\(\[{,;])@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?( |[%\)\]},;]|$)@=/
-syn match scopesHex /\v(^| +|[\(\[{,;])@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
-syn match scopesOctal /\v(^| +|[\(\[{,;])@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
-syn match scopesBinary /\v(^| +|[\(\[{,;])@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)( |[%\)\]},;]|$)@=/
-syn match scopesSymbol /\v(^| +|[\(\[{,;])@<=(\'\k+)( |[%\)\]},;]|$)@=/
-syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\|\=?)( |[%\)\]},;]|$)@=/
-syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\=?)( |[%\)\]},;]|$)@=/
-syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\.\=?)( |[%\)\]},;]|$)@=/
-syn match scopesOperator /\v(^| +|[\(\[{,;])@<=(\.\.\=\=?)( |[%\)\]},;]|$)@=/
 syn keyword scopesBoolean true
 syn keyword scopesBoolean false
 syn keyword scopesNothing none unnamed null

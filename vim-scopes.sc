@@ -17,7 +17,23 @@ fn token-pattern-definition (kind inner)
             kind = kind
             inner = inner
 
-vvv bind manually-defined-rules
+let token-patterns =
+    ..
+        token-pattern-definition "Integer" "([+-]?\\d+(:(usize|[iu](8|16|32|64)))?)"
+        token-pattern-definition "Float" "([+-]?)(\\d+(\\.\\d([eE][+-]\\d+)?)?(:f32|:f64)?|\\d*\\.\\d+([eE][+-]\\d+)?(:f32|:f64)?)"
+        token-pattern-definition "Float" "([+-]?)(\\d+\\.|\\.\\d+)([eE][+-]\\d+)?(:f32|:f64)?"
+        token-pattern-definition "Hex" "([+-]?0x\\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+        token-pattern-definition "Octal" "([+-]?0o\\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+        token-pattern-definition "Binary" "([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+        token-pattern-definition "Symbol" "(\\'\\k+)"
+        # operators containing | and . gotta be matched
+        token-pattern-definition "Operator" "(\\|\\=?)"
+        token-pattern-definition "Operator" "(\\.\\=?)"
+        token-pattern-definition "Operator" "(\\.\\.\\=?)"
+        token-pattern-definition "Operator" "(\\.\\.\\=\\=?)"
+
+
+vvv bind other-rules
 ..
     # %foreign: vim%
     """""letters, numerals, accented letters, symbols except illegal
@@ -25,21 +41,7 @@ vvv bind manually-defined-rules
         setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,-,<,>,:,/,~,!,?,/,+
 
         " literals/constants
-
-    token-pattern-definition "Integer" "([+-]?\\d+(:(usize|[iu](8|16|32|64)))?)"
-    token-pattern-definition "Float" "([+-]?)(\\d+(\\.\\d([eE][+-]\\d+)?)?(:f32|:f64)?|\\d*\\.\\d+([eE][+-]\\d+)?(:f32|:f64)?)"
-    token-pattern-definition "Float" "([+-]?)(\\d+\\.|\\.\\d+)([eE][+-]\\d+)?(:f32|:f64)?"
-    token-pattern-definition "Hex" "([+-]?0x\\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
-    token-pattern-definition "Octal" "([+-]?0o\\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
-    token-pattern-definition "Binary" "([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
-    token-pattern-definition "Symbol" "(\\'\\k+)"
-    # operators containing | and . gotta be matched
-    token-pattern-definition "Operator" "(\\|\\=?)"
-    token-pattern-definition "Operator" "(\\.\\=?)"
-    token-pattern-definition "Operator" "(\\.\\.\\=?)"
-    token-pattern-definition "Operator" "(\\.\\.\\=\\=?)"
-
-    """"syn keyword scopesBoolean true
+        syn keyword scopesBoolean true
         syn keyword scopesBoolean false
         syn keyword scopesNothing none unnamed null
         syn keyword scopesConstant pi pi:f32 p:f64 e e:f32 e:f64
@@ -100,6 +102,7 @@ inline emit-syn-definition-list (kind style)
 vvv print 
 .. 
     header
+    token-patterns
     emit-syn-definition-list 'keywords "Keyword"
     emit-syn-definition-list 'functions "Function"
     emit-syn-definition-list 'operators "Operator"
@@ -108,4 +111,4 @@ vvv print
     emit-syn-definition-list 'spice-macros "SpiceMacro"
     emit-syn-definition-list 'global-symbols "GlobalSymbol"
     emit-syn-definition-list 'special-constants "Constant"
-    manually-defined-rules
+    other-rules
