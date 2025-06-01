@@ -1,4 +1,4 @@
-using import print
+using import print format
 symbols := import .scopes-std-symbols.symbols
 
 let header =
@@ -10,35 +10,44 @@ let header =
         let b:current_syntax = "scopes"
     # %endf: vim%
 
-let manually-defined-rules =
+fn token-pattern-definition (kind inner)
+    ..
+        format 
+            """"syn match scopes{kind} /\v(^| +|[\(\[\{,;])@<={inner}( |[%\)\]\},;]|$)@=/
+            kind = kind
+            inner = inner
+
+vvv bind manually-defined-rules
+..
     # %foreign: vim%
     """""letters, numerals, accented letters, symbols except illegal
         syn iskeyword @,48-57,192-255,33,36-38,42-43,45,47,:,60-64,94-96,\|,~,!,?,/,+
         setlocal iskeyword=@-@,48-57,a-z,A-Z,48-57,@,_,-,<,>,:,/,~,!,?,/,+
 
         " literals/constants
-        syn match scopesInteger /\v(^|\s|\(|\[|\{|,)@<=([+-]?\d+(:(usize|[iu](8|16|32|64)))?)(\s|$|%$|\)|\]|\}|,)@=/
-        syn match scopesFloat /\v(^|\s|\(|\[|\{|,)@<=([+-]?)(\d+(\.\d([eE][+-]\d+)?)?(:f32|:f64)?|\d*\.\d+([eE][+-]\d+)?(:f32|:f64)?)(\s|$|%$|\)|\]|\}|,)@=/ 
-        syn match scopesFloat /\v(^|\s|\(|\[|\{|,)@<=([+-]?)(\d+\.|\.\d+)([eE][+-]\d+)?(:f32|:f64)?(\s|$|%$|\)|\]|\}|,)@=/ 
-        syn match scopesHex /\v(^|\s|\(|\[|\{|,)@<=([+-]?0x\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
-        syn match scopesOctal /\v(^|\s|\(|\[|\{|,)@<=([+-]?0o\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
-        syn match scopesBinary /\v(^|\s|\(|\[|\{|,)@<=([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)(\s|$|%$|\)|\]|\}|,)@=/
-        syn keyword scopesBoolean true
+
+    token-pattern-definition "Integer" "([+-]?\\d+(:(usize|[iu](8|16|32|64)))?)"
+    token-pattern-definition "Float" "([+-]?)(\\d+(\\.\\d([eE][+-]\\d+)?)?(:f32|:f64)?|\\d*\\.\\d+([eE][+-]\\d+)?(:f32|:f64)?)"
+    token-pattern-definition "Float" "([+-]?)(\\d+\\.|\\.\\d+)([eE][+-]\\d+)?(:f32|:f64)?"
+    token-pattern-definition "Hex" "([+-]?0x\\x+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+    token-pattern-definition "Octal" "([+-]?0o\\o+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+    token-pattern-definition "Binary" "([+-]?0b[01]+(:(f32|f64|[iu](8|16|32|64)|usize))?)"
+    token-pattern-definition "Symbol" "(\\'\\k+)"
+    # operators containing | and . gotta be matched
+    token-pattern-definition "Operator" "(\\|\\=?)"
+    token-pattern-definition "Operator" "(\\.\\=?)"
+    token-pattern-definition "Operator" "(\\.\\.\\=?)"
+    token-pattern-definition "Operator" "(\\.\\.\\=\\=?)"
+
+    """"syn keyword scopesBoolean true
         syn keyword scopesBoolean false
         syn keyword scopesNothing none unnamed null
         syn keyword scopesConstant pi pi:f32 p:f64 e e:f32 e:f64
         syn keyword scopesConstant +inf -inf nan
         syn keyword scopesGlobalSymbol main-module?
         syn keyword scopesGlobalSymbol module-dir
-        syn match scopesSymbol /\v(^|\s|\(|\[|\{|,)@<=(\'\k+)(\s|$|%$|\)|\]|\}|,)@=/
         syn match scopesEscape contained /\v\\\S/
         syn match scopesEscape contained /\v\\x\x\x/
-
-        " operators containing | and . gotta be matched
-        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\|\=?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\=?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\.\=?)(\s|$|%$|\)|\]|\})@=/ 
-        syn match scopesOperator /\v(^|\s|\(|\[|\{)@<=(\.\.\=\=?)(\s|$|%$|\)|\]|\})@=/ 
 
         " highlighting links
         hi link scopesKeyword Keyword
